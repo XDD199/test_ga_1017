@@ -1,7 +1,6 @@
 package com.example.test_ga_1017.ga;
 
 import com.example.test_ga_1017.dto.Recipe;
-import com.example.test_ga_1017.service.IRecipeService;
 import io.jenetics.*;
 import io.jenetics.engine.Codecs;
 import io.jenetics.engine.Engine;
@@ -13,7 +12,6 @@ import io.jenetics.ext.moea.NSGA2Selector;
 import io.jenetics.ext.moea.Vec;
 import io.jenetics.util.ISeq;
 import io.jenetics.util.IntRange;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
 import java.time.Duration;
@@ -100,8 +98,8 @@ public class JeneTest {
         f[3] = (f[3] * 4 / f[0]);
         f[0] = (abs(f[0] - 1044) + abs(f[0] - 1392) - (1392 - 1044)) / max.getEnergy();//energy
         f[1] = (abs(f[1] - 27) + abs(f[1] - 39) - (39 - 27)) / max.getProtein();//protein
-        f[2] = (abs(f[2] - 0.25) + abs(f[3] - 0.3) - (0.3 - 0.25)) / 0.5;//fat
-        f[3] = (abs(f[3] - 0.5) + abs(f[3] - 0.65) - (0.65 - 0.5)) / 0.9;//carbohydrate
+        f[2] = (abs(f[2] - 0.25) + abs(f[2] - 0.3) - (0.3 - 0.25)) / 0.4;//fat
+        f[3] = (abs(f[3] - 0.5) + abs(f[3] - 0.65) - (0.65 - 0.5)) / 0.7;//carbohydrate
         f[4] = (abs(f[4] - 7) + abs(f[4] - 30) - (30 - 7)) / max.getDf();//df
         f[5] = (abs(f[5] - 262.4) + abs(f[5] - 820) - (820 - 262.4)) / max.getVita();//vita
         f[6] = (f[6] > 0.512 ? 0 : 0.512 - f[6]) / max.getVitb1();//vitb1
@@ -115,6 +113,41 @@ public class JeneTest {
         f[14] = (abs(f[14] - 5.76) + abs(f[14] - 21.6) - (21.6 - 5.76)) / max.getFe();//fe
 
         return Vec.of(f);
+    }
+
+    static Vec<double[]> f3(final int[] x) {
+        final double[] f = new double[OBJECTIVES];
+        final double[] fr = new double[8];
+        //目标函数是8个的测试
+        Recipe temp;
+        String[] nutrients = new String[]{"Energy", "Protein", "Fat", "Carbohydrate", "Df", "Vita", "Vitb1", "Vitb2", "Vitc", "K", "Na", "Ca", "Mg", "Zn", "Fe"};
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 4; j++) {
+                temp = list.get(j);
+                try {
+                    f[i] = f[i] + x[j] * dynamicNutrientGetter(nutrients[i], temp) / temp.getRawWeight();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        f[2] = (f[2] * 9 / f[0]);
+        f[3] = (f[3] * 4 / f[0]);
+
+        fr[0] = (abs(f[0] - 1044) + abs(f[0] - 1392) - (1392 - 1044)) / max.getEnergy();//energy
+        fr[1] = (abs(f[1] - 27) + abs(f[1] - 39) - (39 - 27)) / max.getProtein();//protein
+        fr[2] = (abs(f[2] - 0.25) + abs(f[2] - 0.3) - (0.3 - 0.25)) / 0.4;//fat
+        fr[3] = (abs(f[3] - 0.5) + abs(f[3] - 0.65) - (0.65 - 0.5)) / 0.7;//carbohydrate
+        fr[4] = (abs(f[14] - 5.76) + abs(f[14] - 21.6) - (21.6 - 5.76)) / max.getFe();//fe
+        fr[5] = (abs(f[11] - 256) + abs(f[11] - 800) - (800 - 256)) / max.getCa();//ca
+        fr[6] = (abs(f[5] - 262.4) + abs(f[5] - 820) - (820 - 262.4)) / max.getVita() + (abs(f[13] - 3.68) + abs(f[13] - 10.028) - (10.028 - 3.68)) / max.getZn();//vita+zn
+
+        fr[7] = (abs(f[4] - 7) + abs(f[4] - 30) - (30 - 7)) / max.getDf() + (f[6] > 0.512 ? 0 : 0.512 - f[6]) / max.getVitb1()
+        + (f[7] > 0.512 ? 0 : 0.512 - f[7]) / max.getVitb2() + (abs(f[8] - 32) + abs(f[8] - 480) - (480 - 32)) / max.getVitc()
+        + (f[9] > 672 ? 0 : 672 - f[9]) / max.getK() + (abs(f[10] - 512) + abs(f[10] - 832) - (832 - 512)) / max.getNa()
+        + (f[12] > 102.4 ? 0 : 102.4 - f[12]) / max.getMg();//df vitb1 vitb2 vitc k na mg
+
+        return Vec.of(fr);
     }
 
     /**
@@ -138,6 +171,12 @@ public class JeneTest {
     static final Problem<int[], IntegerGene, Vec<double[]>>
             PROBLEM2 = Problem.of(
             JeneTest :: f2,  //Native fitness function
+            Codecs.ofVector(IntRange.of(120, 160), IntRange.of(80, 160), IntRange.of(80, 160), IntRange.of(80, 160))  //Problem encoding
+    );
+
+    static final Problem<int[], IntegerGene, Vec<double[]>>
+            PROBLEM3 = Problem.of(
+            JeneTest :: f3,  //Native fitness function
             Codecs.ofVector(IntRange.of(120, 160), IntRange.of(80, 160), IntRange.of(80, 160), IntRange.of(80, 160))  //Problem encoding
     );
 
@@ -171,6 +210,18 @@ public class JeneTest {
                     .minimizing()
                     .build();
 
+    static final Engine<IntegerGene, Vec<double[]>> ENGINE3 =
+            Engine.builder(PROBLEM3)
+                    .populationSize(100)
+                    .alterers( //用来改变后代种群
+                            new SimulatedBinaryCrossover<>(1), //交叉
+                            new Mutator<>(1.0 / 8)) //突变概率
+                    .offspringFraction(0.8)
+                    .offspringSelector(new TournamentSelector<>()) //子代选择器
+                    .survivorsSelector(NSGA2Selector.ofVec()) //幸存者选择器
+                    .minimizing()
+                    .build();
+
     //参数设置：迭代次数、收集数量
     public static void main(final String[] args) {
         //ISeq 不可变的有序序列
@@ -190,9 +241,10 @@ public class JeneTest {
         final ISeq<Phenotype<IntegerGene, Vec<double[]>>> front = ENGINE.stream()
                 .limit(Limits.byExecutionTime(Duration.ofMillis(500)))
                 .limit(2500)
-                .collect(MOEA.toParetoSet(IntRange.of(5, 10)));
+                .collect(MOEA.toParetoSet(IntRange.of(10, 15)));
         Iterator iterator = front.iterator();
-        int[][] result = new int[5][4];
+        int length = front.length();
+        int[][] result = new int[length][4];
         int i = 0;
         while (iterator.hasNext()) {
             Phenotype<IntegerGene, Vec<double[]>> temp = (Phenotype<IntegerGene, Vec<double[]>>) iterator.next();
@@ -212,9 +264,33 @@ public class JeneTest {
         final ISeq<Phenotype<IntegerGene, Vec<double[]>>> front = ENGINE2.stream()
                 .limit(Limits.byExecutionTime(Duration.ofMillis(500)))
                 .limit(2500)
-                .collect(MOEA.toParetoSet(IntRange.of(5, 10)));
+                .collect(MOEA.toParetoSet(IntRange.of(10, 15)));
         Iterator iterator = front.iterator();
-        int[][] result = new int[5][4];
+        int length = front.length();
+        int[][] result = new int[length][4];
+        int i = 0;
+        while (iterator.hasNext()) {
+            Phenotype<IntegerGene, Vec<double[]>> temp = (Phenotype<IntegerGene, Vec<double[]>>) iterator.next();
+            Genotype<IntegerGene> genotype = temp.getGenotype();
+            for (int k = 0; k < 4; k++) {
+                result[i][k] = genotype.get(k, 0).getAllele();
+            }
+            System.out.println(temp);
+            i++;
+        }
+        return result;
+    }
+
+    public static int[][] JeneTestMain3(List<Recipe> l, Recipe m) {
+        list = l;
+        max = m;
+        final ISeq<Phenotype<IntegerGene, Vec<double[]>>> front = ENGINE3.stream()
+                .limit(Limits.byExecutionTime(Duration.ofMillis(500)))
+                .limit(2500)
+                .collect(MOEA.toParetoSet(IntRange.of(10, 15)));
+        Iterator iterator = front.iterator();
+        int length = front.length();
+        int[][] result = new int[length][4];
         int i = 0;
         while (iterator.hasNext()) {
             Phenotype<IntegerGene, Vec<double[]>> temp = (Phenotype<IntegerGene, Vec<double[]>>) iterator.next();

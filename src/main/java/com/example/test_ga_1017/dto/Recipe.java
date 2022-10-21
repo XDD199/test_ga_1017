@@ -28,6 +28,24 @@ public class Recipe implements Serializable {
     private double zn = 0;
     private double fe = 0;
 
+    private double dark = 0;
+    private double both = 0;
+
+    public double getDark() {
+        return dark;
+    }
+
+    public void setDark(double dark) {
+        this.dark = dark;
+    }
+
+    public double getBoth() {
+        return both;
+    }
+
+    public void setBoth(double both) {
+        this.both = both;
+    }
 
     public Recipe newMain() {
         return null;
@@ -255,6 +273,8 @@ public class Recipe implements Serializable {
                 ", mg=" + mg +
                 ", zn=" + zn +
                 ", fe=" + fe +
+                ", dark=" + dark +
+                ", both=" + both +
                 '}';
     }
 }
