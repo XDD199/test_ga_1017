@@ -33,7 +33,7 @@ class TestGa1017ApplicationTests {
     void recipeCount() throws Exception {
         String[] names = new String[]{"燕麦杂粮饭", "尖椒爆鸭", "竹笋炒牛肉", "枸杞菠菜"};
         List<Recipe> list = recipeService.getRecipeList(names);
-        int[] weight = new int[]{130,108,108,116};
+        int[] weight = new int[]{160,160,90,160};
         Recipe temp = recipeService.countRecipeList(list, weight);
         System.out.println(temp);
         System.out.println(recipeService.countHuScore(list, weight, 1));
@@ -89,7 +89,7 @@ class TestGa1017ApplicationTests {
 
     @Test
     void TestMOEA() throws Exception {
-        String[] names = new String[]{"燕麦杂粮饭", "清炒苋菜", "蒜泥秋葵", "尖椒爆鸭"};
+        String[] names = new String[]{"燕麦杂粮饭", "板栗烧鸡", "蒜苔炒腊肉", "蒜泥秋葵"};
         List<Recipe> list = recipeService.getRecipeList(names);
         Recipe max = recipeService.countRecipeList(list, new int[]{160, 160, 160, 160});
         MoeaTest.setMax(max);
@@ -99,7 +99,7 @@ class TestGa1017ApplicationTests {
         System.out.println("___max_______________________________________________________");
 
         NondominatedPopulation result = new Executor()
-                .withAlgorithm("NSGAII")
+                .withAlgorithm("NSGAIII")
                 .withProblemClass(MoeaTest.class)
                 .withMaxEvaluations(10000)
                 .run();
