@@ -86,11 +86,10 @@ public class MoeaTest extends AbstractProblem {
     @Override
     public Solution newSolution() {
         Solution solution = new Solution(4, 8);
-
-        solution.setVariable(0, EncodingUtils.newInt(120, 160));
-        solution.setVariable(1, EncodingUtils.newInt(80, 160));
-        solution.setVariable(2, EncodingUtils.newInt(80, 160));
-        solution.setVariable(3, EncodingUtils.newInt(80, 160));
+        solution.setVariable(0, EncodingUtils.newInt(140, 200));
+        solution.setVariable(1, EncodingUtils.newInt(90, 200));
+        solution.setVariable(2, EncodingUtils.newInt(90, 200));
+        solution.setVariable(3, EncodingUtils.newInt(90, 200));
         return solution;
     }
 }

@@ -31,13 +31,13 @@ class TestGa1017ApplicationTests {
      */
     @Test
     void recipeCount() throws Exception {
-        String[] names = new String[]{"燕麦杂粮饭", "尖椒爆鸭", "竹笋炒牛肉", "枸杞菠菜"};
+        String[] names = new String[]{"燕麦杂粮饭", "尖椒爆鸭", "西葫芦炒蛋", "蒜泥秋葵"};
         List<Recipe> list = recipeService.getRecipeList(names);
-        int[] weight = new int[]{160,160,90,160};
+        int[] weight = new int[]{200,200,200,200};
         Recipe temp = recipeService.countRecipeList(list, weight);
         System.out.println(temp);
-        System.out.println(recipeService.countHuScore(list, weight, 1));
-        recipeService.bestHuScore(list);
+//        System.out.println(recipeService.countHuScore(list, weight, 1));
+//        recipeService.bestHuScore(list);
     }
 
     @Test

@@ -31,6 +31,57 @@ public class Recipe implements Serializable {
     private double dark = 0;
     private double both = 0;
 
+    public static Recipe useRecipe(String name) {
+        Recipe recipe = new Recipe();
+        recipe.setName(name);
+        int i = 0;
+        if (name.equals("燕麦杂粮饭")) {
+            i = 0;
+        } else if (name.equals("尖椒爆鸭")) {
+            i = 1;
+        } else if (name.equals("西葫芦炒蛋")) {
+            i = 2;
+        } else if (name.equals("蒜泥秋葵")) {
+            i = 3;
+        }
+        double[] rawWeight = {130, 108.1, 113.8, 112.6};
+        double[] energy = {447.4, 180.827, 87.8897, 43.8215};
+        double[] protein = {10.93, 9.8596, 3.05699, 2.17029};
+        double[] fat = {0.96, 15.359, 7.03833, 1.51393};
+        double[] carbohydrate = {100.42, 0.94392, 3.26378, 7.64839};
+        double[] df = {2.4, 0.2944, 0.379296, 1.89149};
+        double[] vita = {0, 12.961, 14.5963, 6.15366};
+        double[] vitb1 = {0.288, 0.052988, 0.0240179, 0.0745946};
+        double[] vitb2 = {0.061, 0.144142, 0.0559038, 0.056038};
+        double[] vitc = {0, 13.248, 3.68796, 7.66385};
+        double[] k = {218.8, 143.15, 86.4825, 46.0565};
+        double[] na = {2.43, 376.255, 978.837, 143.423};
+        double[] ca = {25.4, 7.7256, 20.4708, 104.035};
+        double[] mg = {65.8, 10.5954, 7.59064, 40.6981};
+        double[] zn = {2.065, 0.881578, 0.278987, 0.290028};
+        double[] fe = {1.97, 1.64742, 0.70621, 0.366882};
+
+        recipe.setRawWeight(rawWeight[i]);
+        recipe.setEnergy(energy[i]);
+        recipe.setProtein(protein[i]);
+        recipe.setFat(fat[i]);
+        recipe.setCarbohydrate(carbohydrate[i]);
+        recipe.setDf(df[i]);
+        recipe.setVita(vita[i]);
+        recipe.setVitb1(vitb1[i]);
+        recipe.setVitb2(vitb2[i]);
+        recipe.setVitc(vitc[i]);
+        recipe.setK(k[i]);
+        recipe.setNa(na[i]);
+        recipe.setCa(ca[i]);
+        recipe.setMg(mg[i]);
+        recipe.setZn(zn[i]);
+        recipe.setFe(fe[i]);
+
+        return recipe;
+    }
+
+
     public double getDark() {
         return dark;
     }
