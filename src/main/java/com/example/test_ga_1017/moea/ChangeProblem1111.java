@@ -1,7 +1,6 @@
 package com.example.test_ga_1017.moea;
 
 import com.example.test_ga_1017.dto.Recipe;
-import com.example.test_ga_1017.ga.MoeaTest;
 import com.example.test_ga_1017.service.IRecipeService;
 import com.example.test_ga_1017.service.RecipeService;
 import org.moeaframework.core.Solution;
@@ -14,13 +13,14 @@ import java.util.List;
 import static com.example.test_ga_1017.ga.JeneTest.dynamicNutrientGetter;
 import static java.lang.Math.abs;
 
-public class BasicProblem1111 extends AbstractProblem {
+public class ChangeProblem1111 extends AbstractProblem {
 
     private static List<Recipe> list = null;
     private static Recipe max = null;
+    private static final int ObjectiveNumber = 15;
 
-    public BasicProblem1111() {
-        super(4, 9);
+    public ChangeProblem1111() {
+        super(4, ObjectiveNumber);
         String[] names = new String[]{"燕麦杂粮饭", "豆豉肉丁", "毛豆鸡丁", "清炒苋菜"};
         List<Recipe> list = new LinkedList<>();
         list.add(Recipe.useRecipe(names[0]));
@@ -43,7 +43,7 @@ public class BasicProblem1111 extends AbstractProblem {
     }
 
     public static void setList(List<Recipe> list) {
-        BasicProblem1111.list = list;
+        ChangeProblem1111.list = list;
     }
 
     public static Recipe getMax() {
@@ -51,7 +51,7 @@ public class BasicProblem1111 extends AbstractProblem {
     }
 
     public static void setMax(Recipe max) {
-        BasicProblem1111.max = max;
+        ChangeProblem1111.max = max;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class BasicProblem1111 extends AbstractProblem {
 
         int[] x = {x0, x1, x2, x3};
         final double[] f = new double[15];
-        final double[] fout = new double[9];
+        final double[] fout = new double[ObjectiveNumber];
         Recipe temp;
         String[] nutrients = new String[]{"Energy", "Protein", "Fat", "Carbohydrate", "Df", "Vita", "Vitb1", "Vitb2", "Vitc", "K", "Na", "Ca", "Mg", "Zn", "Fe"};
         for (int i = 0; i < 15; i++) {
@@ -85,17 +85,15 @@ public class BasicProblem1111 extends AbstractProblem {
         fout[3] = (abs(f[3] - 0.5) + abs(f[3] - 0.65) - (0.65 - 0.5)) / 0.5;//carbohydrate
         fout[4] = (abs(f[14] - 4.48) + abs(f[14] - 16.8) - (16.8 - 4.48)) / 4.48;//fe
         fout[5] = (abs(f[11] - 272) + abs(f[11] - 850) - (850 - 272)) / 272;//ca
-        fout[6] = (abs(f[5] - 176) + abs(f[5] - 550) - (550 - 176)) / 176
-                + (abs(f[13] - 2.56) + abs(f[13] - 6.976) - (6.976 - 2.56)) / 2.56;//vita+zn
-
-        fout[7] = (abs(f[4] - 5.6) + abs(f[4] - 24) - (24 - 5.6)) / 5.6
-                + (abs(f[8] - 24) + abs(f[8] - 360) - (360 - 24)) / 24
-                + (f[9] > 544 ? 0 : 544 - f[9]) / 544
-                + (f[12] > 83.2 ? 0 : 83.2 - f[12]) / 83.2;//df  vitc k  mg
-
-        fout[8] = (f[6] > 0.352 ? 0 : 0.352 - f[6]) / 0.352//vitb1
-                + (f[7] > 0.352 ? 0 : 0.352 - f[7]) / 0.352 //vitb2
-                + (abs(f[10] - 448) + abs(f[10] - 728) - (728 - 448)) / 448; //na
+        fout[6] = (abs(f[5] - 176) + abs(f[5] - 550) - (550 - 176)) / 176;
+        fout[7] = (abs(f[13] - 2.56) + abs(f[13] - 6.976) - (6.976 - 2.56)) / 2.56;//vita+zn
+        fout[8] = (abs(f[4] - 5.6) + abs(f[4] - 24) - (24 - 5.6)) / 5.6;
+        fout[9] = (abs(f[8] - 24) + abs(f[8] - 360) - (360 - 24)) / 24;
+        fout[10] = (f[9] > 544 ? 0 : 544 - f[9]) / 544;
+        fout[11] = (f[12] > 83.2 ? 0 : 83.2 - f[12]) / 83.2;//df  vitc k  mg
+        fout[12] = (f[6] > 0.352 ? 0 : 0.352 - f[6]) / 0.352;//vitb1
+        fout[13] = (f[7] > 0.352 ? 0 : 0.352 - f[7]) / 0.352; //vitb2
+        fout[14] = (abs(f[10] - 448) + abs(f[10] - 728) - (728 - 448)) / 448; //na
 
         double big = Math.pow(10,20);
         solution.setObjective(0, fout[0]);
@@ -107,6 +105,12 @@ public class BasicProblem1111 extends AbstractProblem {
         solution.setObjective(6, fout[6]);
         solution.setObjective(7, fout[7]);
         solution.setObjective(8, fout[8]);
+        solution.setObjective(9, fout[9]);
+        solution.setObjective(10, fout[10]);
+        solution.setObjective(10, fout[11]);
+        solution.setObjective(10, fout[12]);
+        solution.setObjective(10, fout[13]);
+        solution.setObjective(10, fout[14]);
     }
 
     /**
@@ -117,7 +121,7 @@ public class BasicProblem1111 extends AbstractProblem {
      */
     @Override
     public Solution newSolution() {
-        Solution solution = new Solution(4, 9);
+        Solution solution = new Solution(4, ObjectiveNumber);
         solution.setVariable(0, EncodingUtils.newInt(100, 160));
         solution.setVariable(1, EncodingUtils.newInt(50, 110));
         solution.setVariable(2, EncodingUtils.newInt(50, 110));

@@ -3,6 +3,7 @@ package com.example.test_ga_1017;
 import com.example.test_ga_1017.ga.JeneTest;
 import com.example.test_ga_1017.ga.MoeaDayTest;
 import com.example.test_ga_1017.ga.MoeaTest;
+import com.example.test_ga_1017.moea.BasicProblem1111;
 import com.example.test_ga_1017.service.IRecipeService;
 import com.example.test_ga_1017.dto.Recipe;
 import org.junit.jupiter.api.Test;
@@ -180,19 +181,20 @@ class TestGa1017ApplicationTests {
     }
 
     @Test
-    void TestMOEARandom() throws Exception {
-        String[] names = new String[]{"燕麦杂粮饭", "尖椒爆鸭", "竹笋炒牛肉", "枸杞菠菜"};
+    void TestMOEA_IBEA() throws Exception {
+        String[] names = new String[]{"燕麦杂粮饭", "尖椒爆鸭", "西葫芦炒蛋", "蒜泥秋葵"};
         List<Recipe> list = recipeService.getRecipeList(names);
-        Recipe max = recipeService.countRecipeList(list, new int[]{160, 160, 160, 160});
-        MoeaTest.setMax(max);
-        MoeaTest.setList(list);
-        System.out.println("___max_______________________________________________________");
-        System.out.println(max);
-        System.out.println("___max_______________________________________________________");
+//        Recipe max = recipeService.countRecipeList(list, new int[]{160, 160, 160, 160});
+//        MoeaTest.setMax(max);
+//        MoeaTest.setList(list);
+//        System.out.println("___max_______________________________________________________");
+//        System.out.println(max);
+//        System.out.println("___max_______________________________________________________");
 
         NondominatedPopulation result = new Executor()
-                .withAlgorithm("Random")
-                .withProblemClass(MoeaTest.class)
+                .withAlgorithm("IBEA")
+                .withProperty("indicator", "epsilon")
+                .withProblemClass(BasicProblem1111.class)
                 .withMaxEvaluations(10000)
                 .run();
 
@@ -202,7 +204,7 @@ class TestGa1017ApplicationTests {
             weight[1] = EncodingUtils.getInt(solution.getVariable(1));
             weight[2] = EncodingUtils.getInt(solution.getVariable(2));
             weight[3] = EncodingUtils.getInt(solution.getVariable(3));
-            System.out.println(weight[0] + "," + weight[1] + "," + weight[2] + "," + weight[3]);
+
 //            System.out.println("目标函数为：" + solution.getObjective(0) + "," +
 //                    solution.getObjective(1) + "," +
 //                    solution.getObjective(2) + "," +
@@ -212,7 +214,10 @@ class TestGa1017ApplicationTests {
 //                    solution.getObjective(6) + "," +
 //                    solution.getObjective(7));
             Recipe temp = recipeService.countRecipeList(list, weight);
-            System.out.println(temp + "," + recipeService.countHuScore(list, weight, 1));
+            if (recipeService.countHuScore(list, weight, 1) > 70) {
+                System.out.println(weight[0] + "," + weight[1] + "," + weight[2] + "," + weight[3]);
+                System.out.println(temp + "," + recipeService.countHuScore(list, weight, 1));
+            }
 //            System.out.println("__________________________________________________________");
         }
     }
