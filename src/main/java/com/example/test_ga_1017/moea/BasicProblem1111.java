@@ -21,21 +21,21 @@ public class BasicProblem1111 extends AbstractProblem {
 
     public BasicProblem1111() {
         super(4, 9);
-        String[] names = new String[]{"燕麦杂粮饭", "尖椒爆鸭", "西葫芦炒蛋", "蒜泥秋葵"};
-        List<Recipe> list = new LinkedList<>();
-        list.add(Recipe.useRecipe(names[0]));
-        list.add(Recipe.useRecipe(names[1]));
-        list.add(Recipe.useRecipe(names[2]));
-        list.add(Recipe.useRecipe(names[3]));
-        IRecipeService recipeService = new RecipeService();
-        Recipe max = null;
-        try {
-            max = recipeService.countRecipeList(list, new int[]{160, 110, 110, 120});
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.list = list;
-        this.max = max;
+//        String[] names = new String[]{"燕麦杂粮饭", "尖椒爆鸭", "西葫芦炒蛋", "蒜泥秋葵"};
+//        List<Recipe> list = new LinkedList<>();
+//        list.add(Recipe.useRecipe(names[0]));
+//        list.add(Recipe.useRecipe(names[1]));
+//        list.add(Recipe.useRecipe(names[2]));
+//        list.add(Recipe.useRecipe(names[3]));
+//        IRecipeService recipeService = new RecipeService();
+//        Recipe max = null;
+//        try {
+//            max = recipeService.countRecipeList(list, new int[]{160, 110, 110, 120});
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        this.list = list;
+//        this.max = max;
     }
 
     public static List<Recipe> getList() {
