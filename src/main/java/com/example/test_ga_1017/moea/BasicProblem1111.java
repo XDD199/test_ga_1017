@@ -21,7 +21,7 @@ public class BasicProblem1111 extends AbstractProblem {
 
     public BasicProblem1111() {
         super(4, 9);
-        String[] names = new String[]{"燕麦杂粮饭", "豆豉肉丁", "毛豆鸡丁", "清炒苋菜"};
+        String[] names = new String[]{"燕麦杂粮饭", "尖椒爆鸭", "西葫芦炒蛋", "蒜泥秋葵"};
         List<Recipe> list = new LinkedList<>();
         list.add(Recipe.useRecipe(names[0]));
         list.add(Recipe.useRecipe(names[1]));

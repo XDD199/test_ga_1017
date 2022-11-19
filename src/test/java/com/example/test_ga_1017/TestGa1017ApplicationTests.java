@@ -4,6 +4,7 @@ import com.example.test_ga_1017.ga.JeneTest;
 import com.example.test_ga_1017.ga.MoeaDayTest;
 import com.example.test_ga_1017.ga.MoeaTest;
 import com.example.test_ga_1017.moea.BasicProblem1111;
+import com.example.test_ga_1017.moea.IBEA2Provider;
 import com.example.test_ga_1017.service.IRecipeService;
 import com.example.test_ga_1017.dto.Recipe;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.moeaframework.Executor;
 import org.moeaframework.core.NondominatedPopulation;
 import org.moeaframework.core.Solution;
+import org.moeaframework.core.spi.AlgorithmFactory;
 import org.moeaframework.core.variable.EncodingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -182,7 +184,8 @@ class TestGa1017ApplicationTests {
 
     @Test
     void TestMOEA_IBEA() throws Exception {
-        String[] names = new String[]{"燕麦杂粮饭", "尖椒爆鸭", "西葫芦炒蛋", "蒜泥秋葵"};
+        AlgorithmFactory.getInstance().addProvider(new IBEA2Provider());
+        String[] names = new String[]{"燕麦杂粮饭", "叉烧鸭胸", "青瓜火腿", "清炒苋菜"};
         List<Recipe> list = recipeService.getRecipeList(names);
 //        Recipe max = recipeService.countRecipeList(list, new int[]{160, 160, 160, 160});
 //        MoeaTest.setMax(max);
@@ -192,7 +195,7 @@ class TestGa1017ApplicationTests {
 //        System.out.println("___max_______________________________________________________");
 
         NondominatedPopulation result = new Executor()
-                .withAlgorithm("IBEA")
+                .withAlgorithm("IBEA2")
                 .withProperty("indicator", "epsilon")
                 .withProblemClass(BasicProblem1111.class)
                 .withMaxEvaluations(10000)

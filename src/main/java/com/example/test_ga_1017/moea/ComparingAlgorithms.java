@@ -3,6 +3,7 @@ package com.example.test_ga_1017.moea;
 import org.moeaframework.Analyzer;
 import org.moeaframework.Executor;
 import org.moeaframework.analysis.plot.Plot;
+import org.moeaframework.core.spi.AlgorithmFactory;
 
 import java.io.File;
 
